@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Home, Layers, Tag, Info, Mail, ArrowRight, Smartphone,
   TrendingUp, LifeBuoy, Check, Rocket, Crown, Zap, Globe, Wrench, Puzzle, Menu, X,
@@ -139,6 +139,42 @@ const faqs: [string, string][] = [
 function Index() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("Home");
+
+  useEffect(() => {
+    const sections = nav
+      .map(({ label, href }) => ({ label, id: href.slice(1) }))
+      .map(({ label, id }) => ({ label, element: document.getElementById(id) }))
+      .filter((item): item is { label: string; element: HTMLElement } => Boolean(item.element));
+
+    const updateActive = () => {
+      const scrollPosition = window.scrollY + 180;
+      let current = "Home";
+
+      for (const section of sections) {
+        if (section.element.offsetTop <= scrollPosition) {
+          current = section.label;
+        }
+      }
+
+      const nearBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80;
+
+      if (nearBottom) {
+        current = "Contact";
+      }
+
+      setActive(current);
+    };
+
+    updateActive();
+    window.addEventListener("scroll", updateActive, { passive: true });
+    window.addEventListener("resize", updateActive);
+
+    return () => {
+      window.removeEventListener("scroll", updateActive);
+      window.removeEventListener("resize", updateActive);
+    };
+  }, []);
 
   const NavLinks = ({ onClick }: { onClick?: () => void }) => (
     <>
