@@ -222,7 +222,7 @@ function Index() {
               <img src={hero} width={1024} height={864} alt="Laptop showing a modern business website with floating analytics cards" className="relative w-full animate-float" />
               <div className="card-soft absolute -bottom-2 left-2 flex items-center gap-3 px-4 py-3 sm:left-6">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary text-primary-foreground"><Rocket className="h-4 w-4" /></span>
-                <span><span className="block text-xs text-muted-foreground">Starting from</span><span className="block font-extrabold">₹7,999</span></span>
+
               </div>
             </div>
           </section>
