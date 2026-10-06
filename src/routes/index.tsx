@@ -220,10 +220,6 @@ function Index() {
             <div className="relative animate-fade-up [animation-delay:150ms]">
               <div className="absolute inset-6 rounded-[2rem] bg-gradient-soft" />
               <img src={hero} width={1024} height={864} alt="Laptop showing a modern business website with floating analytics cards" className="relative w-full animate-float" />
-              <div className="card-soft absolute -bottom-2 left-2 flex items-center gap-3 px-4 py-3 sm:left-6">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary text-primary-foreground"><Rocket className="h-4 w-4" /></span>
-
-              </div>
             </div>
           </section>
 
