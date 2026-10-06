@@ -213,33 +213,30 @@ function Index() {
               <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Ready to build something great?</h2>
               <p className="mt-2 max-w-lg text-sm text-muted-foreground">Plan your next project, explore our services and let's bring your ideas online.</p>
             </div>
-            <div className="flex justify-start md:justify-end">
-              <div className="w-[210px] rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Calendar</p>
-                  <p className="mt-0.5 text-sm font-extrabold">October 2026</p>
-                </div>
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary text-primary">
-                  <CalendarDays className="h-4 w-4" />
-                </span>
-              </div>
-              <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold text-muted-foreground">
-                {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => <span key={`${day}-${i}`}>{day}</span>)}
-              </div>
-              <div className="mt-2 grid grid-cols-7 gap-1 text-center text-xs">
-                {[28, 29, 30, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((day, i) => (
-                  <span
-                    key={`${day}-${i}`}
-                    className={`grid h-7 place-items-center rounded-lg font-medium ${day === 6 ? "bg-primary text-primary-foreground shadow-sm" : i < 3 ? "text-muted-foreground/40" : "text-foreground hover:bg-muted"}`}
-                  >
-                    {day}
+            <div className="w-full md:w-[210px]">
+              <div className="rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Calendar</p>
+                    <p className="mt-0.5 text-sm font-extrabold">October 2026</p>
+                  </div>
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary text-primary">
+                    <CalendarDays className="h-4 w-4" />
                   </span>
-                ))}
+                </div>
+                <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold text-muted-foreground">
+                  {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => <span key={day + "-" + i}>{day}</span>)}
+                </div>
+                <div className="mt-2 grid grid-cols-7 gap-1 text-center text-xs">
+                  {[28, 29, 30, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((day, i) => (
+                    <span key={day + "-" + i} className={`grid h-7 place-items-center rounded-lg font-medium ${day === 6 ? "bg-primary text-primary-foreground shadow-sm" : i < 3 ? "text-muted-foreground/40" : "text-foreground hover:bg-muted"}`}>
+                      {day}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-
           {/* HERO */}
           <section className="card-soft relative grid items-center gap-10 overflow-hidden p-7 sm:p-10 md:p-12 lg:grid-cols-[1.05fr_1fr]">
             <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
@@ -286,7 +283,7 @@ function Index() {
 
           {/* PRICING */}
           <section id="pricing" className="scroll-mt-24">
-            <SectionHead center eyebrow="Simple & Transparent" title="Choose the right plan" text="Simple pricing designed to give you exactly what your business needs." />
+            <SectionHead center title="Choose the right plan" text="Simple pricing designed to give you exactly what your business needs." />
             <div className="grid items-stretch gap-6 lg:grid-cols-3">
               {plans.map((p) => (
                 <div key={p.name} className={`card-soft card-hover group relative flex flex-col p-8 ${p.popular ? "border-2 border-primary/50 shadow-glow lg:-translate-y-4 lg:hover:-translate-y-6" : ""}`}>
@@ -364,7 +361,7 @@ function Index() {
 
           {/* PROCESS */}
           <section className="scroll-mt-24">
-            <SectionHead center eyebrow="How it works" title="From idea to launch in six steps" />
+            <SectionHead center title="From idea to launch in six steps" />
             <ol className="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {steps.map((s, i) => (
                 <li key={s.t} className="card-soft card-hover group relative p-6">
