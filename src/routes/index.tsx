@@ -205,34 +205,6 @@ function Index() {
 
       <div>
 
-          {/* Calendar */}
-          <div className="flex justify-end">
-            <div className="w-[210px] rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Calendar</p>
-                  <p className="mt-0.5 text-sm font-extrabold">October 2026</p>
-                </div>
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary text-primary">
-                  <CalendarDays className="h-4 w-4" />
-                </span>
-              </div>
-              <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold text-muted-foreground">
-                {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => <span key={`${day}-${i}`}>{day}</span>)}
-              </div>
-              <div className="mt-2 grid grid-cols-7 gap-1 text-center text-xs">
-                {[28, 29, 30, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((day, i) => (
-                  <span
-                    key={`${day}-${i}`}
-                    className={`grid h-7 place-items-center rounded-lg font-medium ${day === 6 ? "bg-primary text-primary-foreground shadow-sm" : i < 3 ? "text-muted-foreground/40" : "text-foreground hover:bg-muted"}`}
-                  >
-                    {day}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
         <main className="mx-auto max-w-6xl space-y-24 px-5 pb-12 pt-8 md:space-y-28 md:px-10">
           {/* Calendar */}
           <div className="flex justify-end">
