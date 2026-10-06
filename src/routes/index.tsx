@@ -166,21 +166,25 @@ function Index() {
   return (
     <div id="top" className="min-h-screen bg-background font-sans text-foreground">
       {/* Desktop sidebar */}
-      <aside className="fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 rounded-2xl border border-border/70 bg-card/95 p-2 shadow-xl backdrop-blur-md lg:flex">
-        <nav className="flex flex-col gap-1.5">
+      <aside className="group/nav fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 rounded-2xl border border-border/70 bg-card/95 p-2 shadow-xl backdrop-blur-md transition-all duration-300 lg:flex lg:w-[60px] lg:hover:w-[176px]">
+        <nav className="flex w-full flex-col gap-1.5">
           {nav.map(({ label, href, icon: Icon }) => {
             const on = active === label;
             return (
               <a
                 key={label}
                 href={href}
-                title={label}
                 aria-label={label}
                 onClick={() => setActive(label)}
-                className={`group relative grid h-11 w-11 place-items-center rounded-xl transition-all duration-300 ${on ? "bg-secondary text-primary shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-primary"}`}
+                className={`group/item relative flex h-11 w-full items-center rounded-xl transition-all duration-300 ${on ? "bg-secondary text-primary shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-primary"}`}
               >
-                <Icon className="h-[19px] w-[19px]" />
-                {on && <span className="absolute -right-0.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-primary" />}
+                <span className="grid h-11 w-11 shrink-0 place-items-center">
+                  <Icon className="h-[19px] w-[19px]" />
+                </span>
+                <span className="pointer-events-none max-w-0 overflow-hidden whitespace-nowrap text-sm font-semibold opacity-0 transition-all duration-300 group-hover/nav:ml-1 group-hover/nav:max-w-[110px] group-hover/nav:opacity-100">
+                  {label}
+                </span>
+                {on && <span className="absolute right-2 h-1.5 w-1.5 rounded-full bg-primary" />}
               </a>
             );
           })}
