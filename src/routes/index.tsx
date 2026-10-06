@@ -83,12 +83,12 @@ function IconTile({ icon: I, tone = "secondary" }: { icon: React.ElementType; to
 
 /* ---------- content ---------- */
 const services = [
-  { t: "Business Websites", d: "Multi-page websites that present your business professionally.", info: "Starter & up", i: MonitorSmartphone },
-  { t: "Landing Pages", d: "Focused single pages built to turn visitors into enquiries.", info: "Starter & up", i: LayoutTemplate },
-  { t: "SEO Optimization", d: "Clean structure and on-page SEO so customers can find you.", info: "Basic → Advanced", i: Search },
-  { t: "Integrations", d: "WhatsApp, Google Maps, enquiry forms and lead capture.", info: "Growth & up", i: MessageCircle },
-  { t: "Domain & Hosting", d: "Domain registration, hosting setup and deployment.", info: "Add-on or included", i: Globe },
-  { t: "Maintenance & Updates", d: "Fixes, updates, new pages and features when you need them.", info: "Growth & up", i: Wrench },
+  { t: "Business Websites", d: "Multi-page websites that present your business professionally.", i: MonitorSmartphone },
+  { t: "Landing Pages", d: "Focused single pages built to turn visitors into enquiries.", i: LayoutTemplate },
+  { t: "SEO Optimization", d: "Clean structure and on-page SEO so customers can find you.", i: Search },
+  { t: "Integrations", d: "WhatsApp, Google Maps, enquiry forms and lead capture.", i: MessageCircle },
+  { t: "Domain & Hosting", d: "Domain registration, hosting setup and deployment.", i: Globe },
+  { t: "Maintenance & Updates", d: "Fixes, updates, new pages and features when you need them.", i: Wrench },
 ];
 
 const plans = [
@@ -235,15 +235,20 @@ function Index() {
           <section id="services" className="scroll-mt-24">
             <SectionHead title="Services built for your business" text="Everything you need to get online, get found and keep growing." />
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {services.map((s) => (
-                <div key={s.t} className="card-soft card-hover group flex flex-col p-7">
-                  <IconTile icon={s.i} />
-                  <h3 className="mt-5 text-lg font-bold">{s.t}</h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
-                  <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                    <span className="text-xs font-semibold text-accent-foreground">{s.info}</span>
-                    <ArrowRight className="h-4 w-4 text-primary transition-transform duration-300 group-hover:translate-x-1" />
+              {services.map((s, i) => (
+                <div
+                  key={s.t}
+                  className="card-soft group relative flex min-h-[220px] flex-col overflow-hidden p-7 transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.015] hover:border-primary/30 hover:shadow-[0_18px_45px_rgba(79,70,229,0.14)]"
+                  style={{ animationDelay: `${i * 90}ms` }}
+                >
+                  <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-primary/5 transition-all duration-500 group-hover:scale-[2.4] group-hover:bg-primary/10" />
+                  <div className="relative">
+                    <IconTile icon={s.i} />
+                    <h3 className="mt-5 text-lg font-bold transition-transform duration-500 group-hover:translate-x-1">{s.t}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground transition-colors duration-500 group-hover:text-foreground/80">{s.d}</p>
                   </div>
+                  <div className="pointer-events-none absolute bottom-0 left-0 h-1 w-0 bg-gradient-primary transition-all duration-500 group-hover:w-full" />
+                  <div className="pointer-events-none absolute bottom-3 right-5 h-8 w-8 rounded-full border border-primary/0 transition-all duration-500 group-hover:border-primary/20 group-hover:rotate-45" />
                 </div>
               ))}
             </div>
