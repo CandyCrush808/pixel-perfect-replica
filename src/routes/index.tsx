@@ -206,9 +206,15 @@ function Index() {
       <div>
 
         <main className="mx-auto max-w-6xl space-y-24 px-5 pb-12 pt-8 md:space-y-28 md:px-10">
-          {/* Calendar */}
-          <div className="flex justify-end">
-            <div className="w-[210px] rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
+          {/* Greeting + Calendar */}
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="pb-1">
+              <p className="text-sm font-semibold text-primary">Good evening 👋</p>
+              <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Ready to build something great?</h2>
+              <p className="mt-2 max-w-lg text-sm text-muted-foreground">Plan your next project, explore our services and let's bring your ideas online.</p>
+            </div>
+            <div className="flex justify-start md:justify-end">
+              <div className="w-[210px] rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Calendar</p>
