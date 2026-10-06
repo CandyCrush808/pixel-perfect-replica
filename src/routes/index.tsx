@@ -72,11 +72,10 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
-function SectionHead({ eyebrow, title, text, center }: { eyebrow: string; title: string; text?: string; center?: boolean }) {
+function SectionHead({ eyebrow: _eyebrow, title, text, center }: { eyebrow: string; title: string; text?: string; center?: boolean }) {
   return (
     <div className={`mb-10 ${center ? "mx-auto max-w-xl text-center" : "max-w-xl"}`}>
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-4 text-3xl font-extrabold tracking-tight md:text-4xl">{title}</h2>
+      <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">{title}</h2>
       {text && <p className="mt-3 text-muted-foreground">{text}</p>}
     </div>
   );
@@ -200,7 +199,6 @@ function Index() {
           <section className="card-soft relative grid items-center gap-10 overflow-hidden p-7 sm:p-10 md:p-12 lg:grid-cols-[1.05fr_1fr]">
             <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
             <div className="relative animate-fade-up">
-              <Eyebrow>Web development & digital services</Eyebrow>
               <h1 className="mt-5 text-[2.1rem] font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.3rem]">
                 Professional websites that <span className="text-primary">grow your business</span> online.
               </h1>
