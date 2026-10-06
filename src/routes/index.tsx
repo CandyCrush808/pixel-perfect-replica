@@ -103,7 +103,7 @@ const steps = [
   { n: "04", t: "Launch", d: "Your website goes live and we provide support." },
 ];
 
-const faqs = [
+const faqs: [string, string][] = [
   ["What is included in each package?", "Every package includes a professionally designed, responsive website. Higher plans add SEO, integrations, hosting, domain and maintenance — see the comparison table for details."],
   ["Can I request custom features?", "Absolutely. Tell us what you need and we'll scope and quote it separately or fold it into the Premium plan."],
   ["Do you provide domain and hosting?", "Yes. Hosting setup is included from Growth, and Premium includes both hosting and domain setup. It's also available as an add-on."],
