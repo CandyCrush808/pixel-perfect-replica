@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/accordion";
 import hero from "@/assets/hero-illustration.png";
 
-const BRAND = "Brightline Studio";
+const BRAND = "BitBuds";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -204,15 +204,14 @@ function Index() {
       )}
 
       <div>
-
         <main className="mx-auto max-w-6xl space-y-24 px-5 pb-12 pt-8 md:space-y-28 md:px-10">
           {/* Greeting + Calendar */}
           <div className="flex flex-col gap-6 md:flex-row md:items-stretch md:justify-between">
             <div className="card-soft flex flex-1 flex-col justify-center p-6 sm:p-7">
               <div className="pb-1">
-              <p className="text-sm font-semibold text-primary">Good evening 👋</p>
-              <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Ready to build something great?</h2>
-              <p className="mt-2 max-w-lg text-sm text-muted-foreground">Plan your next project, explore our services and let's bring your ideas online.</p>
+                <p className="text-sm font-semibold text-primary">Good evening 👋</p>
+                <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Ready to build something great?</h2>
+                <p className="mt-2 max-w-lg text-sm text-muted-foreground">Plan your next project, explore our services and let's bring your ideas online.</p>
               </div>
             </div>
             <div className="card-soft w-full p-4 sm:p-5 md:w-[240px]">
