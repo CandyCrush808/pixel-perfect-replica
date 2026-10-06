@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   Home, Layers, Tag, Info, Mail, ArrowRight, Smartphone,
   TrendingUp, LifeBuoy, Check, Rocket, Crown, Zap, Globe, Wrench, Puzzle, Menu, X,
-  Phone, MapPin, Hexagon, MonitorSmartphone, LayoutTemplate, Search, MessageCircle, CalendarDays,
+  Phone, MapPin, Hexagon, MonitorSmartphone, LayoutTemplate, Search, MessageCircle,
   ShieldCheck, Clock, HeartHandshake, BadgeIndianRupee, Compass, PenTool, Code2,
   FlaskConical, Send, ClipboardList,
 } from "lucide-react";
@@ -205,39 +205,6 @@ function Index() {
 
       <div>
         <main className="mx-auto max-w-6xl space-y-24 px-5 pb-12 pt-8 md:space-y-28 md:px-10">
-          {/* Greeting + Calendar */}
-          <div className="flex flex-col gap-6 md:flex-row md:items-stretch md:justify-between">
-            <div className="card-soft flex flex-1 flex-col justify-center p-6 sm:p-7">
-              <div className="pb-1">
-                <p className="text-sm font-semibold text-primary">Good evening 👋</p>
-                <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">Ready to build something great?</h2>
-                <p className="mt-2 max-w-lg text-sm text-muted-foreground">Plan your next project, explore our services and let's bring your ideas online.</p>
-              </div>
-            </div>
-            <div className="card-soft w-full p-4 sm:p-5 md:w-[240px]">
-              <div className="rounded-2xl border border-border/70 bg-card p-4 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Calendar</p>
-                    <p className="mt-0.5 text-sm font-extrabold">October 2026</p>
-                  </div>
-                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary text-primary">
-                    <CalendarDays className="h-4 w-4" />
-                  </span>
-                </div>
-                <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold text-muted-foreground">
-                  {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => <span key={day + "-" + i}>{day}</span>)}
-                </div>
-                <div className="mt-2 grid grid-cols-7 gap-1 text-center text-xs">
-                  {[28, 29, 30, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((day, i) => (
-                    <span key={day + "-" + i} className={`grid h-7 place-items-center rounded-lg font-medium ${day === 6 ? "bg-primary text-primary-foreground shadow-sm" : i < 3 ? "text-muted-foreground/40" : "text-foreground hover:bg-muted"}`}>
-                      {day}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
           {/* HERO */}
           <section className="card-soft relative grid items-center gap-10 overflow-hidden p-7 sm:p-10 md:p-12 lg:grid-cols-[1.05fr_1fr]">
             <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
