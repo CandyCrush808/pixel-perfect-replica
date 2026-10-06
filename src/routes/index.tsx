@@ -196,19 +196,6 @@ function Index() {
       )}
 
       <div className="lg:pl-[240px]">
-        {/* Top bar */}
-        <header className="sticky top-0 z-20 border-b border-border/60 bg-background/80 backdrop-blur">
-          <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-5 md:px-10">
-            <button aria-label="Open menu" onClick={() => setOpen(true)} className="grid h-10 w-10 place-items-center rounded-xl bg-card shadow-soft lg:hidden"><Menu className="h-5 w-5" /></button>
-            <div className="lg:hidden"><Logo /></div>
-            <p className="hidden text-sm text-muted-foreground lg:block">Plans from <span className="font-bold text-foreground">₹7,999</span> · Responsive · SEO-ready</p>
-            <div className="ml-auto flex items-center gap-3">
-              <a href="mailto:hello@brightline.studio" className="hidden items-center gap-2 text-sm font-semibold text-muted-foreground transition hover:text-primary md:flex"><Mail className="h-4 w-4" /> hello@brightline.studio</a>
-              <Btn href="#contact" className="hidden px-5 py-2.5 sm:inline-flex">Start a Project <Arrow /></Btn>
-            </div>
-          </div>
-        </header>
-
         <main className="mx-auto max-w-6xl space-y-24 px-5 pb-12 pt-8 md:space-y-28 md:px-10">
           {/* HERO */}
           <section className="card-soft relative grid items-center gap-10 overflow-hidden p-7 sm:p-10 md:p-12 lg:grid-cols-[1.05fr_1fr]">
