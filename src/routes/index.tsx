@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-  Home, Layers, FolderKanban, Tag, Info, Mail, ArrowRight, Sparkles, Smartphone,
+  Home, Layers, Tag, Info, Mail, ArrowRight, Sparkles, Smartphone,
   TrendingUp, LifeBuoy, Check, Rocket, Crown, Zap, Globe, Wrench, Puzzle, Menu, X,
   Phone, MapPin, Hexagon, MonitorSmartphone, LayoutTemplate, Search, MessageCircle,
   ShieldCheck, Clock, HeartHandshake, BadgeIndianRupee, Compass, PenTool, Code2,
-  FlaskConical, Send, ClipboardList, ImageIcon,
+  FlaskConical, Send, ClipboardList,
 } from "lucide-react";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
@@ -31,7 +31,6 @@ const nav = [
   { label: "Services", href: "#services", icon: Layers },
   { label: "Pricing", href: "#pricing", icon: Tag },
   { label: "Why Us", href: "#why", icon: Info },
-  { label: "Projects", href: "#work", icon: FolderKanban },
   { label: "Contact", href: "#contact", icon: Mail },
 ];
 
@@ -320,25 +319,6 @@ function Index() {
                     <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{w.d}</p>
                   </div>
                 ))}
-              </div>
-            </div>
-          </section>
-
-          {/* WORK */}
-          <section id="work" className="scroll-mt-24">
-            <SectionHead eyebrow="Our work" title="Projects" text="Selected work will be showcased here." />
-            <div className="card-soft grid items-center gap-8 overflow-hidden p-8 md:grid-cols-2 md:p-10">
-              <div className="grid aspect-[16/10] place-items-center rounded-2xl border-2 border-dashed border-border bg-gradient-soft">
-                <div className="text-center text-muted-foreground">
-                  <ImageIcon className="mx-auto h-10 w-10 text-primary/60" />
-                  <p className="mt-3 text-sm font-semibold">Project preview coming soon</p>
-                </div>
-              </div>
-              <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-accent-foreground">Portfolio</span>
-                <h3 className="mt-3 text-2xl font-extrabold tracking-tight">Your project could be featured here</h3>
-                <p className="mt-3 text-muted-foreground">We're curating our portfolio. Want to see examples relevant to your industry? Ask us and we'll share them directly.</p>
-                <div className="mt-6"><Btn href="#contact" variant="outline">Request examples <Arrow /></Btn></div>
               </div>
             </div>
           </section>
