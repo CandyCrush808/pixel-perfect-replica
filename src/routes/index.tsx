@@ -166,7 +166,7 @@ function Index() {
   return (
     <div id="top" className="min-h-screen bg-background font-sans text-foreground">
       {/* Desktop sidebar */}
-      <aside className="group/nav fixed left-4 top-4 z-40 hidden h-auto w-[60px] rounded-2xl border border-border/70 bg-card/95 p-2 shadow-xl backdrop-blur-md transition-all duration-300 lg:flex lg:hover:w-[176px]">
+      <aside className="group/nav fixed left-4 top-1/2 z-40 hidden h-auto w-[60px] -translate-y-1/2 rounded-2xl border border-border/70 bg-card/95 p-2 shadow-xl backdrop-blur-md transition-all duration-300 lg:flex lg:hover:w-[176px]">
         <nav className="flex w-full flex-col gap-1.5">
           {nav.map(({ label, href, icon: Icon }) => {
             const on = active === label;
