@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-  Home, Layers, Tag, Info, Mail, ArrowRight, Sparkles, Smartphone,
+  Home, Layers, Tag, Info, Mail, ArrowRight, Smartphone,
   TrendingUp, LifeBuoy, Check, Rocket, Crown, Zap, Globe, Wrench, Puzzle, Menu, X,
-  Phone, MapPin, Hexagon, MonitorSmartphone, LayoutTemplate, Search, MessageCircle,
+  Phone, MapPin, Hexagon, MonitorSmartphone, LayoutTemplate, Search, MessageCircle, CalendarDays,
   ShieldCheck, Clock, HeartHandshake, BadgeIndianRupee, Compass, PenTool, Code2,
   FlaskConical, Send, ClipboardList,
 } from "lucide-react";
@@ -64,15 +64,7 @@ function Btn({ href, children, variant = "primary", className = "" }: { href: st
 
 const Arrow = () => <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />;
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3.5 py-1.5 text-xs font-semibold text-accent-foreground">
-      <Sparkles className="h-3.5 w-3.5" /> {children}
-    </span>
-  );
-}
-
-function SectionHead({ eyebrow: _eyebrow, title, text, center }: { eyebrow: string; title: string; text?: string; center?: boolean }) {
+function SectionHead({ title, text, center }: { title: string; text?: string; center?: boolean }) {
   return (
     <div className={`mb-10 ${center ? "mx-auto max-w-xl text-center" : "max-w-xl"}`}>
       <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">{title}</h2>
@@ -174,11 +166,25 @@ function Index() {
   return (
     <div id="top" className="min-h-screen bg-background font-sans text-foreground">
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[220px] flex-col border-r border-sidebar-border bg-sidebar p-5 lg:flex lg:w-[240px]">
-        <Logo />
-        <p className="mb-2 mt-10 px-3.5 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70">Menu</p>
-        <nav className="space-y-1"><NavLinks /></nav>
-        <SideCta />
+      <aside className="fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 rounded-2xl border border-border/70 bg-card/95 p-2 shadow-xl backdrop-blur-md lg:flex">
+        <nav className="flex flex-col gap-1.5">
+          {nav.map(({ label, href, icon: Icon }) => {
+            const on = active === label;
+            return (
+              <a
+                key={label}
+                href={href}
+                title={label}
+                aria-label={label}
+                onClick={() => setActive(label)}
+                className={`group relative grid h-11 w-11 place-items-center rounded-xl transition-all duration-300 ${on ? "bg-secondary text-primary shadow-sm" : "text-muted-foreground hover:bg-muted hover:text-primary"}`}
+              >
+                <Icon className="h-[19px] w-[19px]" />
+                {on && <span className="absolute -right-0.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-primary" />}
+              </a>
+            );
+          })}
+        </nav>
       </aside>
 
       {/* Mobile menu */}
@@ -193,7 +199,34 @@ function Index() {
         </div>
       )}
 
-      <div className="lg:pl-[240px]">
+      <div>
+
+          {/* Floating calendar */}
+          <div className="fixed right-6 top-6 z-30 hidden w-[210px] rounded-2xl border border-border/70 bg-card/95 p-4 shadow-xl backdrop-blur-md lg:block">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Calendar</p>
+                <p className="mt-0.5 text-sm font-extrabold">October 2026</p>
+              </div>
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-secondary text-primary">
+                <CalendarDays className="h-4 w-4" />
+              </span>
+            </div>
+            <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold text-muted-foreground">
+              {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => <span key={`${day}-${i}`}>{day}</span>)}
+            </div>
+            <div className="mt-2 grid grid-cols-7 gap-1 text-center text-xs">
+              {[28, 29, 30, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((day, i) => (
+                <span
+                  key={`${day}-${i}`}
+                  className={`grid h-7 place-items-center rounded-lg font-medium ${day === 6 ? "bg-primary text-primary-foreground shadow-sm" : i < 3 ? "text-muted-foreground/40" : "text-foreground hover:bg-muted"}`}
+                >
+                  {day}
+                </span>
+              ))}
+            </div>
+          </div>
+
         <main className="mx-auto max-w-6xl space-y-24 px-5 pb-12 pt-8 md:space-y-28 md:px-10">
           {/* HERO */}
           <section className="card-soft relative grid items-center gap-10 overflow-hidden p-7 sm:p-10 md:p-12 lg:grid-cols-[1.05fr_1fr]">
@@ -223,7 +256,7 @@ function Index() {
 
           {/* SERVICES */}
           <section id="services" className="scroll-mt-24">
-            <SectionHead eyebrow="What we do" title="Services built for your business" text="Everything you need to get online, get found and keep growing." />
+            <SectionHead title="Services built for your business" text="Everything you need to get online, get found and keep growing." />
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {services.map((s) => (
                 <div key={s.t} className="card-soft card-hover group flex flex-col p-7">
@@ -302,7 +335,7 @@ function Index() {
           <section id="why" className="scroll-mt-24">
             <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
               <div className="lg:sticky lg:top-28 lg:self-start">
-                <SectionHead eyebrow="Why choose us" title="A partner focused on your business" text="We keep things simple, honest and built around what actually helps you get customers." />
+                <SectionHead title="A partner focused on your business" text="We keep things simple, honest and built around what actually helps you get customers." />
                 <Btn href="#contact">Talk to us <Arrow /></Btn>
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
@@ -339,7 +372,7 @@ function Index() {
 
           {/* FAQ */}
           <section className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-            <SectionHead eyebrow="FAQ" title="Questions, answered" text="Can't find what you're looking for? Just reach out." />
+            <SectionHead title="Questions, answered" text="Can't find what you're looking for? Just reach out." />
             <Accordion type="single" collapsible className="card-soft px-6">
               {faqs.map(([q, a]) => (
                 <AccordionItem key={q} value={q}>
