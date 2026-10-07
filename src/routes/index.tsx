@@ -410,7 +410,7 @@ function Index() {
                 <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">Ready to build your website?</h2>
                 <p className="mt-3 max-w-md opacity-90">Tell us about your business. We'll recommend the right plan and give you a clear quote — no obligation.</p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Btn href="mailto:hello@brightline.studio" variant="light">Let's Work Together <Arrow /></Btn>
+                  <Btn href="/pricing" variant="light">Let's Work Together <Arrow /></Btn>
                   <a href="tel:+919876543210" className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary-foreground/30 px-6 py-3 text-sm font-semibold transition hover:bg-primary-foreground/10"><Phone className="h-4 w-4" /> Call us</a>
                 </div>
               </div>
