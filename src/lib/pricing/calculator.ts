@@ -115,7 +115,7 @@ export function validateQuote(draft: QuoteDraft) {
 
   if (
     draft.client.email &&
-    !/^\\S+@\\S+\\.\\S+$/.test(draft.client.email)
+    !/^\S+@\S+\.\S+$/.test(draft.client.email)
   ) {
     errors.email = "Enter a valid email address.";
   }
