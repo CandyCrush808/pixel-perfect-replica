@@ -11,15 +11,19 @@ export function calculateQuote(
 ): QuoteCalculation {
   const packagePrice = money(selectedPackage.price);
 
-  const packageBreakdown = selectedPackage.services.reduce((sum, item) => {
-    const service = services.find((s) => s.id === item.serviceId);
-    return (
-      sum +
-      (service
-        ? money(service.price) * Math.max(0, item.quantity)
-        : 0)
-    );
-  }, 0);
+  const packageBreakdown = selectedPackage.services.reduce(
+    (sum, item) => {
+      const service = services.find((s) => s.id === item.serviceId);
+
+      return (
+        sum +
+        (service
+          ? money(service.price) * Math.max(0, item.quantity)
+          : 0)
+      );
+    },
+    0,
+  );
 
   const packageAdjustment = money(packagePrice - packageBreakdown);
 
@@ -54,9 +58,9 @@ export function calculateQuote(
   let discountAmount = 0;
 
   if (draft.discountType === "PERCENTAGE") {
-    const discountRate =
-      Math.min(100, Math.max(0, money(draft.discountValue))) / 100;
-    discountAmount = subtotal * discountRate;
+    discountAmount =
+      subtotal *
+      (Math.min(100, Math.max(0, money(draft.discountValue))) / 100);
   } else if (draft.discountType === "FIXED") {
     discountAmount = Math.min(subtotal, money(draft.discountValue));
   }
@@ -106,27 +110,25 @@ export function validateQuote(draft: QuoteDraft) {
 
   if (!draft.packageId) errors.package = "Please select a package.";
   if (!draft.client.name.trim()) errors.name = "Client name is required.";
-  if (!draft.client.company.trim()) {
+  if (!draft.client.company.trim())
     errors.company = "Business / company name is required.";
-  }
 
   if (
     draft.client.email &&
-    !/^\S+@\S+\.\S+$/.test(draft.client.email)
+    !/^\\S+@\\S+\\.\\S+$/.test(draft.client.email)
   ) {
     errors.email = "Enter a valid email address.";
   }
 
   if (
     draft.client.phone &&
-    !/^[0-9+()\-\s]{7,20}$/.test(draft.client.phone)
+    !/^[0-9+()\\-\\s]{7,20}$/.test(draft.client.phone)
   ) {
     errors.phone = "Enter a valid phone number.";
   }
 
-  if (draft.discountValue < 0) {
+  if (draft.discountValue < 0)
     errors.discount = "Discount cannot be negative.";
-  }
 
   if (draft.discountType === "PERCENTAGE" && draft.discountValue > 100) {
     errors.discount = "Percentage discount cannot exceed 100%.";
@@ -140,11 +142,7 @@ export function validateQuote(draft: QuoteDraft) {
     errors.cost = "Domain and hosting cannot be negative.";
   }
 
-  if (
-    draft.items.some(
-      (item) => item.quantity <= 0 || item.unitPrice < 0,
-    )
-  ) {
+  if (draft.items.some((item) => item.quantity <= 0 || item.unitPrice < 0)) {
     errors.items = "Service quantities and prices must be valid.";
   }
 
