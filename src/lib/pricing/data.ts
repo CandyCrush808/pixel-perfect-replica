@@ -35,7 +35,7 @@ export const maintenancePlans: MaintenancePlan[] = [
   {id:"premium",name:"Premium",price:7999,billing:"YEARLY",active:true,features:["Everything in Standard","Priority support","More frequent updates","Performance optimization","Security checks","4 update requests/month","Priority technical assistance"]},
 ];
 export const defaultSettings: AppSettings = {
-  company:{companyName:"BitBuds",logoText:"BB",email:"hello@bitbuds.in",phone:"+91 98765 43210",address:"Pune, Maharashtra, India",website:"bitbuds.in",gstNumber:"",paymentDetails:"UPI / Bank transfer details can be added in Company Settings.",quotationPrefix:"DB"},
+  company:{companyName:"BitBuds",logoText:"BB",email:"hello@bitbuds.in",phone:"+91 98765 43210",address:"Pune, Maharashtra, India",website:"bitbuds.in",gstNumber:"",paymentDetails:"UPI / Bank transfer details can be added in Company Settings.",quotationPrefix:"BB"},
   tax:{enabled:true,name:"GST",rate:18,afterDiscount:true},
   terms:["50% advance is required before project commencement.","Remaining payment is due before final launch unless another payment plan is selected.","Domain and hosting are billed separately at actual provider/renewal cost.","Third-party services and subscription charges are billed separately.","Major changes outside the agreed scope may incur additional charges.","Quotation is valid for the specified validity period.","Maintenance is optional unless explicitly included.","Content/images provided by the client must be supplied before the agreed deadline."],
 };
