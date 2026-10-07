@@ -122,7 +122,7 @@ export function validateQuote(draft: QuoteDraft) {
 
   if (
     draft.client.phone &&
-    !/^[0-9+()\\-\\s]{7,20}$/.test(draft.client.phone)
+    !/^[0-9+()\-\s]{7,20}$/.test(draft.client.phone)
   ) {
     errors.phone = "Enter a valid phone number.";
   }
