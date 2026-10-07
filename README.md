@@ -1,24 +1,69 @@
-# Pixel Perfect Replica
+# BitBuds — Web & Digital Services
 
-Implement exactly the screenshot and nothing else
+BitBuds is a React + TypeScript website for presenting web-development services and generating client quotations through an integrated pricing workspace.
 
-This project was built with [Lovable](https://lovable.dev).
+## Features
 
-## Build with Lovable
+- Responsive BitBuds marketing website
+- Scroll-aware navigation and animated UI
+- Service and pricing sections
+- Package comparison
+- Internal quotation builder at `/pricing`
+- Starter, Professional and Premium packages
+- Add-on services, domain/hosting and maintenance pricing
+- Discount and GST calculation
+- Configurable payment plans
+- Quotation history with localStorage persistence
+- Client-facing quotation preview
+- PDF and DOCX quotation export
+- Service, package, maintenance and company/tax management
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/6ce76822-49ec-4f60-a11b-701d42a218c3).
+## Tech Stack
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- React 19
+- TypeScript
+- Vite
+- TanStack Router / TanStack Start
+- Tailwind CSS 4
+- Radix UI
+- Lucide React
+- jsPDF
+- docx
 
-## Development
+## Run Locally
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requirements: Node.js and npm.
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
+git clone https://github.com/CandyCrush808/pixel-perfect-replica.git
+cd pixel-perfect-replica
+npm install
 npm run dev
 ```
+
+Then open the local URL shown by Vite.
+
+## Production Checks
+
+```bash
+npm run build
+npm run lint
+npm test
+```
+
+## Pricing Workspace
+
+Open:
+
+```text
+/pricing
+```
+
+The quotation workspace stores editable pricing data and saved quotations in the browser's localStorage because this project does not currently use a backend database.
+
+## Important
+
+- Domain and hosting are treated as separate recurring/provider charges.
+- GST is calculated after the configured discount.
+- Existing website sections, animations and routing are preserved.
+- Do not commit `.env` files or other secrets.
