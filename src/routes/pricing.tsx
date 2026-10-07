@@ -70,7 +70,249 @@ function PricingPage(){
   const del=(id:string)=>{const next=quotes.filter(q=>q.id!==id);setQuotes(next);storage.saveQuotes(next)};
   const setStatus=(q:Quotation,status:QuoteStatus)=>{const next=quotes.map(x=>x.id===q.id?{...x,status,updatedAt:new Date().toISOString()}:x);setQuotes(next);storage.saveQuotes(next)};
 
-  const pdf=async()=>{    const q=makeQuote("Draft");    if(!q||!calc)return;    const {jsPDF}=await import("jspdf");    // Receipt-inspired 80mm layout: warm paper, navy ink, dotted rules and compact typography.    const width=80;    const height=235;    const doc=new jsPDF({unit:"mm",format:[width,height]});    const ink=[31,78,120] as const;    const paper=[250,247,238] as const;    const left=7;    const right=width-7;    let y=9;    doc.setFillColor(...paper);    doc.rect(0,0,width,height,"F");    doc.setTextColor(...ink);    const rule=()=>{      doc.setDrawColor(...ink);      doc.setLineWidth(0.28);      doc.setLineDashPattern([0.7,1.1],0);      doc.line(left,y,right,y);      doc.setLineDashPattern([],0);      y+=5;    };    const text=(value:string,size=8,bold=false,align:"left"|"center"|"right"="left",gap=3)=>{      doc.setFont("courier",bold?"bold":"normal");      doc.setFontSize(size);      doc.setTextColor(...ink);      const max=right-left;      const lines=doc.splitTextToSize(value,max);      const x=align==="center"?width/2:align==="right"?right:left;      doc.text(lines,x,y,{align});      y+=lines.length*(size>=11?5.2:4)+gap;    };    const itemRow=(index:number,itemName:string,description:string,quantity:number,amount:number)=>{      doc.setFont("courier","bold");      doc.setFontSize(8.5);      doc.text(String(index).padStart(2,"0"),left,y);      doc.text(itemName.slice(0,24),left+7,y);      doc.text(formatINR(amount),right,y,{align:"right"});      y+=4;      doc.setFont("courier","normal");      doc.setFontSize(7);      const desc=doc.splitTextToSize(description||"Website service",34);      doc.text(desc,left+7,y);      doc.text("Amount: "+quantity,left+42,y);      y+=desc.length*3.5+4;      rule();    };    text(settings.company.companyName||"BitBuds",18,true,"center",1);    text("WEBSITE DEVELOPMENT",7,true,"center",2);    text(q.number+"  •  "+q.date,7,false,"center",4);    rule();    doc.setFont("courier","bold");    doc.setFontSize(7);    doc.text("PURCHASED SERVICES",left,y);    doc.text("AMOUNT",right-21,y);    doc.text("PRICE",right,y,{align:"right"});    y+=4;    rule();    itemRow(1,q.packageName,"Website development package",1,q.packagePrice);    draft.items.forEach((item,index)=>itemRow(index+2,item.name,item.category||"Additional website service",item.quantity,calc.additionalServices[index]?.amount??(item.quantity*item.unitPrice)));    if(calc.domain) itemRow(draft.items.length+2,"Domain / Renewal","Domain registration or renewal",1,calc.domain);    if(calc.hosting) itemRow(draft.items.length+3,"Hosting / Renewal","Website hosting / renewal",1,calc.hosting);    if(calc.maintenance) itemRow(draft.items.length+4,maintenance?.name||"Maintenance","Annual website care plan",1,calc.maintenance);    y+=1;    text("ORIGINAL SUBTOTAL:                         "+formatINR(calc.subtotal),8,true,"left",2);    if(calc.discountAmount) text("DISCOUNT:                                 -"+formatINR(calc.discountAmount),8,false,"left",2);    text("SUBTOTAL AFTER DISCOUNT:                   "+formatINR(calc.taxableAmount),8,false,"left",2);    text(q.taxName+" ("+q.taxRate+"%):                         +"+formatINR(calc.taxAmount),8,false,"left",4);    text("TOTAL AMOUNT:                             "+formatINR(calc.total),10,true,"left",4);    rule();    text(paymentLabel(q.paymentPlan),7,true,"center",2);    calc.payments.forEach((payment,index)=>text("Payment "+(index+1)+": "+formatINR(payment),7,false,"center",1));    text("Timeline: "+q.timeline,7,false,"center",3);    rule();    text("TERMS & CONDITIONS",8,true,"center",2);    q.terms.slice(0,5).forEach((term,index)=>text((index+1)+". "+term,6.5,false,"left",1));    text("Domain and hosting charges are billed separately at actual provider / renewal cost.",6.5,true,"center",3);    text(settings.company.email+"  •  "+settings.company.phone,6.5,false,"center",1);    text(settings.company.address,6.5,false,"center",1);    if(settings.company.website) text(settings.company.website,6.5,false,"center",1);    text("Thank you for choosing BitBuds",7,true,"center",2);    doc.save(safeName(q.client.company||settings.company.companyName)+"-Quotation-"+q.number+".pdf");  };  const docx=async()=>{    const q=makeQuote("Draft");    if(!q||!calc)return;    const {Document,Packer,Paragraph,TextRun,Table,TableRow,TableCell,WidthType,AlignmentType,VerticalAlign,BorderStyle}=await import("docx");    const ink="1F4E78";    const paper="FAF7EE";    const noBorders={style:BorderStyle.NONE,size:0,color:paper};    const dotted={style:BorderStyle.DOTTED,size:4,color:ink};    const para=(value:string,size=8,bold=false,align=AlignmentType.LEFT,after=60)=>new Paragraph({alignment:align,spacing:{after},children:[new TextRun({text:value,font:"Courier New",size:size*2,bold,color:ink})]});    const line=()=>new Paragraph({spacing:{before:30,after:60},border:{bottom:dotted},children:[new TextRun({text:" ",font:"Courier New",size:2})]});    const cell=(value:string,bold=false,align=AlignmentType.LEFT)=>new TableCell({verticalAlign:VerticalAlign.CENTER,borders:{top:noBorders,bottom:noBorders,left:noBorders,right:noBorders},children:[new Paragraph({alignment:align,spacing:{after:0},children:[new TextRun({text:value,font:"Courier New",size:14,bold,color:ink})]})]});    const serviceRows:Array<[string,string,string,string]>=[["01",q.packageName,"1",formatINR(q.packagePrice)]];    draft.items.forEach((item,index)=>serviceRows.push([String(index+2).padStart(2,"0"),item.name,String(item.quantity),formatINR(calc.additionalServices[index]?.amount??(item.quantity*item.unitPrice))]));    if(calc.domain)serviceRows.push([String(serviceRows.length+1).padStart(2,"0"),"Domain / Renewal","1",formatINR(calc.domain)]);    if(calc.hosting)serviceRows.push([String(serviceRows.length+1).padStart(2,"0"),"Hosting / Renewal","1",formatINR(calc.hosting)]);    if(calc.maintenance)serviceRows.push([String(serviceRows.length+1).padStart(2,"0"),maintenance?.name||"Maintenance","1",formatINR(calc.maintenance)]);    const table=new Table({      width:{size:100,type:WidthType.PERCENTAGE},      borders:{top:noBorders,bottom:noBorders,left:noBorders,right:noBorders,insideHorizontal:dotted,insideVertical:noBorders},      rows:[        new TableRow({children:[cell("NO.",true),cell("PURCHASED SERVICES",true),cell("QTY",true,AlignmentType.CENTER),cell("PRICE",true,AlignmentType.RIGHT)]}),        ...serviceRows.flatMap(([number,name,quantity,price])=>[          new TableRow({children:[cell(number),cell(name,true),cell(quantity,false,AlignmentType.CENTER),cell(price,false,AlignmentType.RIGHT)]}),          new TableRow({children:[new TableCell({columnSpan:4,borders:{top:noBorders,bottom:noBorders,left:noBorders,right:noBorders},children:[para(name==="Website development package"?"Website development package":name==="Domain / Renewal"?"Domain registration or renewal":name==="Hosting / Renewal"?"Website hosting / renewal":"Additional website service",6.5,false,AlignmentType.LEFT,40)]})]})        ])      ]    });    const children=[      para(settings.company.companyName||"BitBuds",24,true,AlignmentType.CENTER,40),      para("WEBSITE DEVELOPMENT",14,true,AlignmentType.CENTER,20),      para(q.number+"  •  "+q.date,12,false,AlignmentType.CENTER,80),      line(),      para("CLIENT: "+(q.client.name||"Client")+"  •  "+(q.client.company||"Business / Company"),10,true,AlignmentType.LEFT,40),      para("PROJECT: "+(q.client.projectName||"Website Development"),9,false,AlignmentType.LEFT,80),      table,      line(),      para("ORIGINAL SUBTOTAL: "+formatINR(calc.subtotal),11,true,AlignmentType.LEFT,30),      para("DISCOUNT: -"+formatINR(calc.discountAmount),10,false,AlignmentType.LEFT,30),      para("SUBTOTAL AFTER DISCOUNT: "+formatINR(calc.taxableAmount),10,false,AlignmentType.LEFT,30),      para(q.taxName+" ("+q.taxRate+"%): +"+formatINR(calc.taxAmount),10,false,AlignmentType.LEFT,50),      para("TOTAL AMOUNT: "+formatINR(calc.total),15,true,AlignmentType.LEFT,70),      line(),      para(paymentLabel(q.paymentPlan),10,true,AlignmentType.CENTER,30),      ...calc.payments.map((payment,index)=>para("Payment "+(index+1)+": "+formatINR(payment),9,false,AlignmentType.CENTER,15)),      para("Timeline: "+q.timeline,9,false,AlignmentType.CENTER,50),      para("TERMS & CONDITIONS",11,true,AlignmentType.CENTER,30),      ...q.terms.slice(0,5).map((term,index)=>para((index+1)+". "+term,8,false,AlignmentType.LEFT,15)),      para("Domain and hosting charges are billed separately at actual provider / renewal cost.",8,true,AlignmentType.CENTER,50),      para(settings.company.email+"  •  "+settings.company.phone,8,false,AlignmentType.CENTER,15),      para(settings.company.address,8,false,AlignmentType.CENTER,15),      ...(settings.company.website?[para(settings.company.website,8,false,AlignmentType.CENTER,15)]:[]),      para("Thank you for choosing BitBuds",9,true,AlignmentType.CENTER,0),    ];    const doc=new Document({      sections:[{        properties:{page:{size:{width:4536,height:10800},margin:{top:360,right:360,bottom:360,left:360}}},        children      }]    });    const blob=await Packer.toBlob(doc);    const url=URL.createObjectURL(blob);    const a=document.createElement("a");    a.href=url;    a.download=safeName(q.client.company||settings.company.companyName)+"-Quotation-"+q.number+".docx";    a.click();    URL.revokeObjectURL(url);  };
+  const pdf=async () => {
+    const q = makeQuote("Draft");
+    if (!q || !calc) return;
+
+    const { jsPDF } = await import("jspdf");
+    const width = 80;
+    const height = 250;
+    const doc = new jsPDF({ unit: "mm", format: [width, height] });
+    const ink = { r: 31, g: 78, b: 120 };
+    const paper = { r: 250, g: 247, b: 238 };
+    const left = 7;
+    const right = width - 7;
+    let y = 9;
+
+    doc.setFillColor(paper.r, paper.g, paper.b);
+    doc.rect(0, 0, width, height, "F");
+    doc.setTextColor(ink.r, ink.g, ink.b);
+
+    const rule = () => {
+      doc.setDrawColor(ink.r, ink.g, ink.b);
+      doc.setLineWidth(0.25);
+      doc.line(left, y, right, y);
+      y += 4;
+    };
+
+    const line = (
+      value: string,
+      size = 7.5,
+      bold = false,
+      align: "left" | "center" | "right" = "left",
+      gap = 2.5,
+    ) => {
+      doc.setFont("courier", bold ? "bold" : "normal");
+      doc.setFontSize(size);
+      doc.setTextColor(ink.r, ink.g, ink.b);
+      const x = align === "center" ? width / 2 : align === "right" ? right : left;
+      const lines = doc.splitTextToSize(value, right - left);
+      doc.text(lines, x, y, { align });
+      y += lines.length * 3.6 + gap;
+    };
+
+    const item = (
+      number: number,
+      name: string,
+      description: string,
+      quantity: number,
+      amount: number,
+    ) => {
+      doc.setFont("courier", "bold");
+      doc.setFontSize(8);
+      doc.text(String(number).padStart(2, "0"), left, y);
+      doc.text(name.slice(0, 23), left + 7, y);
+      doc.text(formatINR(amount), right, y, { align: "right" });
+      y += 4;
+
+      doc.setFont("courier", "normal");
+      doc.setFontSize(6.5);
+      const lines = doc.splitTextToSize(description || "Website service", 38);
+      doc.text(lines, left + 7, y);
+      doc.text("Amount: " + quantity, right - 23, y);
+      y += lines.length * 3 + 3;
+      rule();
+    };
+
+    line(settings.company.companyName || "BitBuds", 17, true, "center", 1);
+    line("WEBSITE DEVELOPMENT", 7, true, "center", 1);
+    line(q.number + "  •  " + q.date, 6.5, false, "center", 3);
+    rule();
+
+    doc.setFont("courier", "bold");
+    doc.setFontSize(6.5);
+    doc.text("PURCHASED SERVICES", left, y);
+    doc.text("AMOUNT", right - 22, y);
+    doc.text("PRICE", right, y, { align: "right" });
+    y += 4;
+    rule();
+
+    item(1, q.packageName, "Website development package", 1, q.packagePrice);
+
+    draft.items.forEach((service, index) => {
+      const amount = calc.additionalServices[index]?.amount ?? service.quantity * service.unitPrice;
+      item(index + 2, service.name, service.category || "Additional website service", service.quantity, amount);
+    });
+
+    let number = draft.items.length + 2;
+    if (calc.domain > 0) item(number++, "Domain / Renewal", "Domain registration or renewal", 1, calc.domain);
+    if (calc.hosting > 0) item(number++, "Hosting / Renewal", "Website hosting or renewal", 1, calc.hosting);
+    if (calc.maintenance > 0) item(number, selectedMaintenance?.name || "Maintenance", "Annual website care plan", 1, calc.maintenance);
+
+    line("ORIGINAL SUBTOTAL: " + formatINR(calc.subtotal), 7.5, true, "left", 1.5);
+    if (calc.discountAmount > 0) {
+      line("DISCOUNT: -" + formatINR(calc.discountAmount), 7.5, false, "left", 1.5);
+    }
+    line("SUBTOTAL AFTER DISCOUNT: " + formatINR(calc.taxableAmount), 7.5, false, "left", 1.5);
+    line(q.taxName + " (" + q.taxRate + "%): +" + formatINR(calc.taxAmount), 7.5, false, "left", 2);
+    line("TOTAL AMOUNT: " + formatINR(calc.total), 9.5, true, "left", 3);
+    rule();
+
+    line(paymentLabel(q.paymentPlan), 6.5, true, "center", 1.5);
+    calc.payments.forEach((payment, index) => {
+      line("Payment " + (index + 1) + ": " + formatINR(payment), 6.5, false, "center", 1);
+    });
+    line("Timeline: " + q.timeline, 6.5, false, "center", 2);
+    rule();
+
+    line("TERMS & CONDITIONS", 7.5, true, "center", 1.5);
+    q.terms.slice(0, 5).forEach((term, index) => {
+      line((index + 1) + ". " + term, 5.8, false, "left", 0.8);
+    });
+
+    line("Domain and hosting charges are billed separately at actual provider / renewal cost.", 5.8, true, "center", 2);
+    line(settings.company.email + "  •  " + settings.company.phone, 6, false, "center", 1);
+    line(settings.company.address, 6, false, "center", 1);
+    if (settings.company.website) line(settings.company.website, 6, false, "center", 1);
+    line("Thank you for choosing BitBuds", 6.5, true, "center", 1);
+
+    doc.save(safeName(q.client.company || settings.company.companyName) + "-Quotation-" + q.number + ".pdf");
+  };
+
+  const docx = async () => {
+    const q = makeQuote("Draft");
+    if (!q || !calc) return;
+
+    const {
+      Document,
+      Packer,
+      Paragraph,
+      TextRun,
+      Table,
+      TableRow,
+      TableCell,
+      WidthType,
+      AlignmentType,
+    } = await import("docx");
+
+    const ink = "1F4E78";
+    const text = (value: string, size = 9, bold = false, align = AlignmentType.LEFT) =>
+      new Paragraph({
+        alignment: align,
+        spacing: { after: 80 },
+        children: [
+          new TextRun({
+            text: value,
+            font: "Courier New",
+            size: size * 2,
+            bold,
+            color: ink,
+          }),
+        ],
+      });
+
+    const rows: string[][] = [
+      ["01", q.packageName, "1", formatINR(q.packagePrice)],
+      ...draft.items.map((service, index) => [
+        String(index + 2).padStart(2, "0"),
+        service.name,
+        String(service.quantity),
+        formatINR(calc.additionalServices[index]?.amount ?? service.quantity * service.unitPrice),
+      ]),
+    ];
+
+    if (calc.domain > 0) rows.push([String(rows.length + 1).padStart(2, "0"), "Domain / Renewal", "1", formatINR(calc.domain)]);
+    if (calc.hosting > 0) rows.push([String(rows.length + 1).padStart(2, "0"), "Hosting / Renewal", "1", formatINR(calc.hosting)]);
+    if (calc.maintenance > 0) rows.push([String(rows.length + 1).padStart(2, "0"), selectedMaintenance?.name || "Maintenance", "1", formatINR(calc.maintenance)]);
+
+    const table = new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({ children: [text("NO.", 8, true)] }),
+            new TableCell({ children: [text("PURCHASED SERVICES", 8, true)] }),
+            new TableCell({ children: [text("QTY", 8, true, AlignmentType.CENTER)] }),
+            new TableCell({ children: [text("PRICE", 8, true, AlignmentType.RIGHT)] }),
+          ],
+        }),
+        ...rows.map((row) =>
+          new TableRow({
+            children: row.map((value, index) =>
+              new TableCell({
+                children: [
+                  text(
+                    value,
+                    index === 1 ? 8 : 7,
+                    index === 1,
+                    index === 2 ? AlignmentType.CENTER : index === 3 ? AlignmentType.RIGHT : AlignmentType.LEFT,
+                  ),
+                ],
+              }),
+            ),
+          }),
+        ),
+      ],
+    });
+
+    const children = [
+      text(settings.company.companyName || "BitBuds", 20, true, AlignmentType.CENTER),
+      text("WEBSITE DEVELOPMENT", 10, true, AlignmentType.CENTER),
+      text(q.number + "  •  " + q.date, 8, false, AlignmentType.CENTER),
+      text("CLIENT: " + (q.client.name || "Client") + "  •  " + (q.client.company || "Business / Company"), 8, true),
+      text("PROJECT: " + (q.client.projectName || "Website Development"), 8),
+      table,
+      text("ORIGINAL SUBTOTAL: " + formatINR(calc.subtotal), 9, true),
+      text("DISCOUNT: -" + formatINR(calc.discountAmount), 8),
+      text("SUBTOTAL AFTER DISCOUNT: " + formatINR(calc.taxableAmount), 8),
+      text(q.taxName + " (" + q.taxRate + "%): +" + formatINR(calc.taxAmount), 8),
+      text("TOTAL AMOUNT: " + formatINR(calc.total), 12, true),
+      text(paymentLabel(q.paymentPlan), 8, true, AlignmentType.CENTER),
+      ...calc.payments.map((payment, index) =>
+        text("Payment " + (index + 1) + ": " + formatINR(payment), 8, false, AlignmentType.CENTER),
+      ),
+      text("Timeline: " + q.timeline, 8, false, AlignmentType.CENTER),
+      text("TERMS & CONDITIONS", 9, true, AlignmentType.CENTER),
+      ...q.terms.slice(0, 5).map((term, index) => text((index + 1) + ". " + term, 7)),
+      text("Domain and hosting charges are billed separately at actual provider / renewal cost.", 7, true, AlignmentType.CENTER),
+      text(settings.company.email + "  •  " + settings.company.phone, 7, false, AlignmentType.CENTER),
+      text(settings.company.address, 7, false, AlignmentType.CENTER),
+      ...(settings.company.website ? [text(settings.company.website, 7, false, AlignmentType.CENTER)] : []),
+      text("Thank you for choosing BitBuds", 8, true, AlignmentType.CENTER),
+    ];
+
+    const document = new Document({
+      sections: [
+        {
+          properties: {
+            page: {
+              size: { width: 4536, height: 10800 },
+              margin: { top: 360, right: 360, bottom: 360, left: 360 },
+            },
+          },
+          children,
+        },
+      ],
+    });
+
+    const blob = await Packer.toBlob(document);
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = safeName(q.client.company || settings.company.companyName) + "-Quotation-" + q.number + ".docx";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
   const storedTotal=(q:Quotation)=>{const p=packages.find(x=>x.id===q.packageId);if(!p)return q.packagePrice;const d:QuoteDraft={client:q.client,packageId:q.packageId,items:q.items,domain:q.domain,hosting:q.hosting,maintenanceId:q.maintenanceId,discountType:q.discountType,discountValue:q.discountValue,taxEnabled:q.taxEnabled,taxName:q.taxName,taxRate:q.taxRate,paymentPlan:q.paymentPlan,customPayments:q.customPayments??[50,50],date:q.date,validUntil:q.validUntil,timeline:q.timeline,terms:q.terms};return calculateQuote(d,p,services,q.maintenancePrice).total};
 
   return <div className="min-h-screen bg-background text-foreground">
