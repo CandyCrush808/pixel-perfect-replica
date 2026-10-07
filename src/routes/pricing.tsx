@@ -291,7 +291,7 @@ function PricingPage(){
       text("Thank you for choosing BitBuds", 8, true, AlignmentType.CENTER),
     ];
 
-    const document = new Document({
+    const wordDocument = new Document({
       sections: [
         {
           properties: {
@@ -305,9 +305,9 @@ function PricingPage(){
       ],
     });
 
-    const blob = await Packer.toBlob(document);
+    const blob = await Packer.toBlob(wordDocument);
     const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
+    const anchor = window.document.createElement("a");
     anchor.href = url;
     anchor.download = safeName(q.client.company || settings.company.companyName) + "-Quotation-" + q.number + ".docx";
     anchor.click();
